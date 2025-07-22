@@ -1,0 +1,55 @@
+package com.example.electronics.serviceImpl;
+
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+
+import com.example.electronics.dto.UserDto;
+import com.example.electronics.service.UserService;
+
+@Service
+public class UserServiceImpl implements UserService {
+
+	@Override
+	public UserDto createUser(UserDto userDto) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public UserDto updateUser(UserDto userDto, String userId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void deleteUser(String userId) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public List<UserDto> getAllUser() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public UserDto getUserById(String UserId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public UserDto getUserByEmail(String email) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<UserDto> searchUser(String keyword) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+}

@@ -1,0 +1,82 @@
+package com.example.electronics.serviceImpl;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.example.electronics.dto.UserDto;
+import com.example.electronics.entity.User;
+import com.example.electronics.repository.UserRepository;
+import com.example.electronics.service.UserService;
+
+@Service
+public class UserServiceImpl implements UserService {
+
+	@Autowired
+	private UserRepository userRepository;
+
+	@Override
+	public UserDto createUser(UserDto userDto) {
+
+		// Dto to Entity Conversion
+		User user = dtoToEntity(userDto);
+
+		User savedUser = userRepository.save(user);
+
+		// Entity to Dto Conversion
+		UserDto userDto1 = entityToDto(savedUser);
+
+		return userDto1;
+	}
+
+	@Override
+	public UserDto updateUser(UserDto userDto, String userId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void deleteUser(String userId) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public List<UserDto> getAllUser() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public UserDto getUserById(String UserId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public UserDto getUserByEmail(String email) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<UserDto> searchUser(String keyword) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	private User dtoToEntity(UserDto userDto) {
+		User user = new User.Builder().userId(userDto.getUserId()).name(userDto.getName()).email(userDto.getEmail())
+				.password(userDto.getPassword()).about(userDto.getAbout()).gender(userDto.getGender())
+				.imageName(userDto.getImageName()).build();
+
+		return user;
+	}
+
+	private UserDto entityToDto(User savedUser) {
+
+		return null;
+	}
+
+}

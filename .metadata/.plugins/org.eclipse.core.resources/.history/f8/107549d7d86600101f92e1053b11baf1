@@ -1,0 +1,108 @@
+package com.example.electronics.serviceImpl;
+
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.example.electronics.dto.UserDto;
+import com.example.electronics.entity.User;
+import com.example.electronics.repository.UserRepository;
+import com.example.electronics.service.UserService;
+
+@Service
+public class UserServiceImpl implements UserService {
+
+	@Autowired
+	private UserRepository userRepository;
+
+	@Override
+	public UserDto createUser(UserDto userDto) {
+
+		// Generate unique Id
+		String userId = UUID.randomUUID().toString();
+		userDto.setUserId(userId);
+
+		// Dto to Entity Conversion
+		User user = dtoToEntity(userDto);
+
+		User savedUser = userRepository.save(user);
+
+		// Entity to Dto Conversion
+		UserDto userDto1 = entityToDto(savedUser);
+
+		return userDto1;
+	}
+
+	@Override
+	public UserDto updateUser(UserDto userDto, String userId) {
+		User user = userRepository.findById(userId)
+				.orElseThrow(() -> new RuntimeException("User Not found with Id Exception"));
+		user.setName(userDto.getName());
+		user.setPassword(userDto.getPassword());
+		user.setGender(userDto.getAbout());
+		user.setAbout(userDto.getAbout());
+		user.setImageName(userDto.getImageName());
+
+		User updatedUser = userRepository.save(user);
+		UserDto updatedDto = entityToDto(updatedUser);
+
+		return updatedDto;
+	}
+
+	@Override
+	public void deleteUser(String userId) {
+		User user = userRepository.findById(userId)
+				.orElseThrow(() -> new RuntimeException("User Not found with Id Exception"));
+		userRepository.delete(user);
+
+	}
+
+	@Override
+	public List<UserDto> getAllUser() {
+		List<User> users = userRepository.findAll();
+		List<UserDto> dtoList = users.stream().map(user -> entityToDto(user)).collect(Collectors.toList());
+		return dtoList;
+	}
+
+	@Override
+	public UserDto getUserById(String userId) {
+		User user = userRepository.findById(userId)
+				.orElseThrow(() -> new RuntimeException("User Not found with Id Exception"));
+		
+		return entityToDto(user);
+	}
+
+	@Override
+	public UserDto getUserByEmail(String email) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<UserDto> searchUser(String keyword) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	private User dtoToEntity(UserDto userDto) {
+		User user = new User.Builder().userId(userDto.getUserId()).name(userDto.getName()).email(userDto.getEmail())
+				.password(userDto.getPassword()).about(userDto.getAbout()).gender(userDto.getGender())
+				.imageName(userDto.getImageName()).build();
+
+		return user;
+	}
+
+	private UserDto entityToDto(User savedUser) {
+
+		UserDto userDto = new UserDto.Builder().userId(savedUser.getUserId()).name(savedUser.getName())
+				.email(savedUser.getEmail()).password(savedUser.getPassword()).about(savedUser.getAbout())
+				.gender(savedUser.getGender()).imageName(savedUser.getImageName()).build();
+
+		return userDto;
+
+	}
+
+}
