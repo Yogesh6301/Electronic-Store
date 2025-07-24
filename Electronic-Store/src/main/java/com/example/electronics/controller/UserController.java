@@ -12,11 +12,15 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.electronics.dto.ApiResponseMessage;
+import com.example.electronics.dto.PageableResponse;
 import com.example.electronics.dto.UserDto;
 import com.example.electronics.service.UserService;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/users")
@@ -26,14 +30,14 @@ public class UserController {
 	private UserService userService;
 
 	@PostMapping("/create")
-	public ResponseEntity<UserDto> createUser(@RequestBody UserDto userDto) {
+	public ResponseEntity<UserDto> createUser(@Valid @RequestBody UserDto userDto) {
 		UserDto createduserDto = userService.createUser(userDto);
 		return new ResponseEntity<>(createduserDto, HttpStatus.CREATED);
 
 	}
 
 	@PutMapping("/update")
-	public ResponseEntity<UserDto> updateUser(@RequestBody UserDto userDto, @PathVariable String userId) {
+	public ResponseEntity<UserDto> updateUser(@Valid @RequestBody UserDto userDto, @PathVariable String userId) {
 		UserDto updateduserDto = userService.updateUser(userDto, userId);
 		return new ResponseEntity<>(updateduserDto, HttpStatus.OK);
 
@@ -42,22 +46,24 @@ public class UserController {
 	@DeleteMapping("/{userId}")
 	public ResponseEntity<ApiResponseMessage> deleteUser(@PathVariable String userId) {
 		userService.deleteUser(userId);
-		ApiResponseMessage response = new ApiResponseMessage.Builder()
-		        .message("User is deleted  successfully")
-		        .success(true)
-		        .status(HttpStatus.OK)
-		        .build();
-		return new ResponseEntity<>(response,HttpStatus.OK);
+		ApiResponseMessage response = new ApiResponseMessage.Builder().message("User is deleted  successfully")
+				.success(true).status(HttpStatus.OK).build();
+		return new ResponseEntity<>(response, HttpStatus.OK);
 
 	}
 
 	@GetMapping
-	public ResponseEntity<List<UserDto>> getAllUsers() {
-		return new ResponseEntity<>(userService.getAllUser(), HttpStatus.OK);
+	public ResponseEntity<PageableResponse<UserDto>> getAllUsers(
+			@RequestParam(value = "pageNumber", defaultValue = "0", required = false) int pageNumber,
+			@RequestParam(value = "pageSize", defaultValue = "5", required = false) int pageSize,
+			@RequestParam(value = "sortBy", defaultValue = "name", required = false) String sortBy,
+			@RequestParam(value = "sortDir", defaultValue = "asc", required = false) String sortDir) {
 
+		PageableResponse<UserDto> users = userService.getAllUsers(pageNumber, pageSize, sortBy, sortDir);
+		return new ResponseEntity<>(users, HttpStatus.OK);
 	}
 
-	@GetMapping("{userId}")
+	@GetMapping("/{userId}")
 	public ResponseEntity<UserDto> getUser(@PathVariable String userId) {
 		return new ResponseEntity<>(userService.getUserById(userId), HttpStatus.OK);
 
@@ -68,8 +74,9 @@ public class UserController {
 		return new ResponseEntity<>(userService.getUserByEmail(email), HttpStatus.OK);
 
 	}
+
 	@GetMapping("/search/{keywords}")
-	public ResponseEntity<List<UserDto>>serachUser(@PathVariable String keywords) {
+	public ResponseEntity<List<UserDto>> serachUser(@PathVariable String keywords) {
 		return new ResponseEntity<>(userService.searchUser(keywords), HttpStatus.OK);
 
 	}

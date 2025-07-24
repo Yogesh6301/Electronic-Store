@@ -5,12 +5,20 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.example.electronics.dto.PageableResponse;
 import com.example.electronics.dto.UserDto;
 import com.example.electronics.entity.User;
+import com.example.electronics.exception.ResourceNotFoundException;
 import com.example.electronics.repository.UserRepository;
 import com.example.electronics.service.UserService;
+import com.example.electronics.utility.Helper;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -39,7 +47,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public UserDto updateUser(UserDto userDto, String userId) {
 		User user = userRepository.findById(userId)
-				.orElseThrow(() -> new RuntimeException("User Not found with Id Exception"));
+				.orElseThrow(() -> new ResourceNotFoundException("User Not found with Id Exception"));
 		user.setName(userDto.getName());
 		user.setPassword(userDto.getPassword());
 		user.setGender(userDto.getAbout());
@@ -55,22 +63,26 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public void deleteUser(String userId) {
 		User user = userRepository.findById(userId)
-				.orElseThrow(() -> new RuntimeException("User Not found with Id Exception"));
+				.orElseThrow(() -> new ResourceNotFoundException("User Not found with Id Exception"));
 		userRepository.delete(user);
 
 	}
 
 	@Override
-	public List<UserDto> getAllUser() {
-		List<User> users = userRepository.findAll();
-		List<UserDto> dtoList = users.stream().map(user -> entityToDto(user)).collect(Collectors.toList());
-		return dtoList;
+	public PageableResponse<UserDto> getAllUsers(int pageNumber, int pageSize, String sortBy, String sortDir) {
+		Sort sort = sortDir.equalsIgnoreCase("desc") ? Sort.by(sortBy).descending() : Sort.by(sortBy).ascending();
+		Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
+
+		Page<User> page = userRepository.findAll(pageable);
+
+		PageableResponse<UserDto> response = Helper.getPageableResponse(page, UserDto.class);
+		return response;
 	}
 
 	@Override
 	public UserDto getUserById(String userId) {
 		User user = userRepository.findById(userId)
-				.orElseThrow(() -> new RuntimeException("User Not found with Id Exception"));
+				.orElseThrow(() -> new ResourceNotFoundException("User Not found with Id Exception"));
 
 		return entityToDto(user);
 	}
@@ -78,7 +90,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public UserDto getUserByEmail(String email) {
 		User user = userRepository.findByEmail(email)
-				.orElseThrow(() -> new RuntimeException("User Not found with EmailId"));
+				.orElseThrow(() -> new ResourceNotFoundException("User Not found with EmailId"));
 		return entityToDto(user);
 	}
 

@@ -1,0 +1,119 @@
+import java.util.List;
+
+public class PageableResponse<T> {
+
+    private List<T> content;
+    private int pageNumber;
+    private int pageSize;
+    private long totalElements;
+    private int totalPages;
+    private boolean lastPages;
+
+    // No-args constructor
+    public PageableResponse() {
+    }
+
+    // All-args constructor
+    public PageableResponse(List<T> content, int pageNumber, int pageSize, long totalElements, int totalPages, boolean lastPages) {
+        this.content = content;
+        this.pageNumber = pageNumber;
+        this.pageSize = pageSize;
+        this.totalElements = totalElements;
+        this.totalPages = totalPages;
+        this.lastPages = lastPages;
+    }
+
+    // Getters
+    public List<T> getContent() {
+        return content;
+    }
+
+    public int getPageNumber() {
+        return pageNumber;
+    }
+
+    public int getPageSize() {
+        return pageSize;
+    }
+
+    public long getTotalElements() {
+        return totalElements;
+    }
+
+    public int getTotalPages() {
+        return totalPages;
+    }
+
+    public boolean isLastPages() {
+        return lastPages;
+    }
+
+    // Setters
+    public void setContent(List<T> content) {
+        this.content = content;
+    }
+
+    public void setPageNumber(int pageNumber) {
+        this.pageNumber = pageNumber;
+    }
+
+    public void setPageSize(int pageSize) {
+        this.pageSize = pageSize;
+    }
+
+    public void setTotalElements(long totalElements) {
+        this.totalElements = totalElements;
+    }
+
+    public void setTotalPages(int totalPages) {
+        this.totalPages = totalPages;
+    }
+
+    public void setLastPages(boolean lastPages) {
+        this.lastPages = lastPages;
+    }
+
+    // Builder pattern
+    public static class Builder<T> {
+        private List<T> content;
+        private int pageNumber;
+        private int pageSize;
+        private long totalElements;
+        private int totalPages;
+        private boolean lastPages;
+
+        public Builder<T> content(List<T> content) {
+            this.content = content;
+            return this;
+        }
+
+        public Builder<T> pageNumber(int pageNumber) {
+            this.pageNumber = pageNumber;
+            return this;
+        }
+
+        public Builder<T> pageSize(int pageSize) {
+            this.pageSize = pageSize;
+            return this;
+        }
+
+        public Builder<T> totalElements(long totalElements) {
+            this.totalElements = totalElements;
+            return this;
+        }
+
+        public Builder<T> totalPages(int totalPages) {
+            this.totalPages = totalPages;
+            return this;
+        }
+
+        public Builder<T> lastPages(boolean lastPages) {
+            this.lastPages = lastPages;
+            return this;
+        }
+
+        public PageableResponse<T> build() {
+            return new PageableResponse<>(content, pageNumber, pageSize, totalElements, totalPages, lastPages);
+        }
+    }
+}

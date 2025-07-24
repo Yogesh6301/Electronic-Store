@@ -1,12 +1,23 @@
 package com.example.electronics.dto;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
+
 public class UserDto {
 
 	private String userId;
+	@Size(min = 3, max = 15, message = "Invalid Name")
 	private String name;
+	
+	@Pattern(regexp = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$", message = "Invalid email structure")
+	@NotBlank(message = "Email is required")
 	private String email;
+	@NotBlank(message="Password  required")
 	private String password;
 	private String gender;
+	
+	@NotBlank(message="Write anything about yourself")
 	private String about;
 	private String imageName;
 

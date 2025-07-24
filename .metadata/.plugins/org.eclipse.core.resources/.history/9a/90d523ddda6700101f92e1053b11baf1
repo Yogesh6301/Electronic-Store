@@ -1,0 +1,77 @@
+package com.example.electronics.controller;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.example.electronics.dto.ApiResponseMessage;
+import com.example.electronics.dto.UserDto;
+import com.example.electronics.service.UserService;
+
+@RestController
+@RequestMapping("/users")
+public class UserController {
+
+	@Autowired
+	private UserService userService;
+
+	@PostMapping("/create")
+	public ResponseEntity<UserDto> createUser(@RequestBody UserDto userDto) {
+		UserDto createduserDto = userService.createUser(userDto);
+		return new ResponseEntity<>(createduserDto, HttpStatus.CREATED);
+
+	}
+
+	@PutMapping("/update")
+	public ResponseEntity<UserDto> updateUser(@RequestBody UserDto userDto, @PathVariable String userId) {
+		UserDto updateduserDto = userService.updateUser(userDto, userId);
+		return new ResponseEntity<>(updateduserDto, HttpStatus.OK);
+
+	}
+
+	@DeleteMapping("/{userId}")
+	public ResponseEntity<ApiResponseMessage> deleteUser(@PathVariable String userId) {
+		userService.deleteUser(userId);
+		ApiResponseMessage response = new ApiResponseMessage.Builder()
+		        .message("User is deleted  successfully")
+		        .success(true)
+		        .status(HttpStatus.OK)
+		        .build();
+		return new ResponseEntity<>(response,HttpStatus.OK);
+
+	}
+
+	@GetMapping
+	public ResponseEntity<List<UserDto>> getAllUsers() {
+		return new ResponseEntity<>(userService.getAllUser(), HttpStatus.OK);
+
+	}
+
+	@GetMapping("{userId}")
+	public ResponseEntity<UserDto> getUser(@PathVariable String userId) {
+		return new ResponseEntity<>(userService.getUserById(userId), HttpStatus.OK);
+
+	}
+
+	@GetMapping("/email/{email}")
+	public ResponseEntity<UserDto> getUserByEmail(@PathVariable String email) {
+		return new ResponseEntity<>(userService.getUserByEmail(email), HttpStatus.OK);
+
+	}
+	@GetMapping("/search/{keywords}")
+	public ResponseEntity<List<UserDto>>serachUser(@PathVariable String keywords) {
+		return new ResponseEntity<>(userService.searchUser(keywords), HttpStatus.OK);
+
+	}
+
+}
