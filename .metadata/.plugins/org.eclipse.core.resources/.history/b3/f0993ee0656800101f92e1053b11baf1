@@ -1,0 +1,7 @@
+package com.example.electronics.serviceImpl;
+
+import com.example.electronics.service.CategoryService;
+
+public class CategoryServiceImpl implements CategoryService {
+
+}

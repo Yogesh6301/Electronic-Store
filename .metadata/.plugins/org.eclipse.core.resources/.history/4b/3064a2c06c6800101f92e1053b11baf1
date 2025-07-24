@@ -1,0 +1,57 @@
+package com.example.electronics.serviceImpl;
+
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.example.electronics.dto.CategoryDto;
+import com.example.electronics.dto.PageableResponse;
+import com.example.electronics.entity.Category;
+import com.example.electronics.repository.CategoryRepository;
+import com.example.electronics.service.CategoryService;
+
+@Service
+public class CategoryServiceImpl implements CategoryService {
+
+	@Autowired
+	private CategoryService categoryService;
+	@Autowired
+	private CategoryRepository categoryRepository;
+
+	@Autowired
+	private ModelMapper modelmapper;
+
+	@Override
+	public CategoryDto create(CategoryDto categoryDto) {
+		Category category = modelmapper.map(categoryDto, Category.class);
+		Category savedCategory = categoryRepository.save(category);
+
+		CategoryDto updateddto = modelmapper.map(savedCategory, CategoryDto.class);
+		return updateddto;
+	}
+
+	@Override
+	public CategoryDto update(CategoryDto categoryDto, String categoryId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void delete(String categoryId) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public PageableResponse<CategoryDto> getAll(int pageNumber, int pageSize, String sortBy, String sortDir) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public CategoryDto get(String categoryId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+}
