@@ -1,0 +1,39 @@
+package com.example.electronics.service;
+
+import java.util.List;
+
+import com.example.electronics.dto.PageableResponse;
+import com.example.electronics.dto.ProductDto;
+
+public interface ProductService {
+
+	// Create product and assign to a category
+	ProductDto createProduct(ProductDto productDto);
+
+	// Update product details
+	ProductDto update(ProductDto productDto, String productId);
+
+	// Delete a product
+	void delete(String productId);
+
+	// Get single product by ID
+	ProductDto get(String productId);
+
+	// Get all products with pagination and sorting
+	PageableResponse<ProductDto> getAllProducts(int pageNumber, int pageSize, String sortBy, String sortDir);
+
+	// Get all :Live
+	PageableResponse<ProductDto> getAllLive(int pageNumber, int pageSize, String sortBy, String sortDir);
+
+	// search product
+	PageableResponse<ProductDto> searchByTitle(String subTitle, int pageNumber, int pageSize, String sortBy,
+			String sortDir);
+
+	// create product with category(product ko category ke andar daalna h)
+	ProductDto createcategoryWithProduct(ProductDto productDto, String categoryId);
+
+	// create product with category(existing product ke andar category ke andar
+	// daalna h)
+	ProductDto updateCategory(ProductDto productDto, String categoryId , String productId;
+
+}

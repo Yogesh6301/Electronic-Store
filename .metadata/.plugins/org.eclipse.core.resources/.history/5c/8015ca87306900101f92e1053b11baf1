@@ -1,0 +1,84 @@
+package com.example.electronics.serviceImpl;
+
+import java.util.List;
+import java.util.UUID;
+
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.example.electronics.dto.CategoryDto;
+import com.example.electronics.dto.ProductDto;
+import com.example.electronics.entity.Category;
+import com.example.electronics.entity.Product;
+import com.example.electronics.exception.ResourceNotFoundException;
+import com.example.electronics.repository.ProductRepository;
+import com.example.electronics.service.ProductService;
+
+@Service
+public class ProductServiceImpl implements ProductService {
+
+	@Autowired
+	private ProductRepository productRepository;
+
+	@Autowired
+	private ModelMapper modelmapper;
+
+	@Override
+	public ProductDto createProduct(ProductDto productDto, String categoryId) {
+
+		String productId = UUID.randomUUID().toString();
+		productDto.setProductId(productId);
+
+		Product product = modelmapper.map(productDto, Product.class);
+		Product savedProduct = productRepository.save(product);
+		return modelmapper.map(savedProduct, ProductDto.class);
+	}
+
+	@Override
+	public ProductDto update(ProductDto productDto, String productId) {
+		Product product = productRepository.findById(productId)
+				.orElseThrow(() -> new ResourceNotFoundException("Product not found with Id: " + productId));
+
+		product.setTitle(productDto.getTitle());
+		product.setDescription(productDto.getDescription());
+		product.setPrice(productDto.getPrice());
+		product.setDiscountedPrice(productDto.getDiscountedPrice());
+		product.setQuantity(productDto.getQuantity());
+		product.setLive(productDto.isLive());
+		product.setStock(productDto.isStock());
+		product.setAddedDate(productDto.getAddedDate());
+
+		// Step 3: Save updated product
+		Product updatedProduct = productRepository.save(product);
+
+		// Step 4: Map to DTO and return
+		return modelmapper.map(updatedProduct, ProductDto.class);
+	}
+
+	@Override
+	public void delete(String productId) {
+		Product product = productRepository.findById(productId)
+				.orElseThrow(() -> new ResourceNotFoundException("Product not found with Id: " + productId));
+		productRepository.delete(product);
+	}
+
+	@Override
+	public ProductDto get(String productId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<ProductDto> getAllLive() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<ProductDto> searchByTitle(String subTitle) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+}

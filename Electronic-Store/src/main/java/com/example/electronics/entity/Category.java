@@ -1,24 +1,32 @@
 package com.example.electronics.entity;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name="categories")
+@Table(name = "categories")
 public class Category {
-	
-	
+
 	@Id
-	@Column(name="id")
 	private String categoryId;
-	@Column(name="category_title" ,length=60)
+	@Column(name = "category_title", length = 60)
 	private String title;
-	@Column(name="category_description" ,length=50)
+	@Column(name = "category_description", length = 50)
 	private String description;
 	private String coverImage;
 
+	// cascade=CascadeType.ALL = if category remove then product also remove
+	// fetch=FetchType.LAZY if category fetch then product will not fetch that time
+	@OneToMany(mappedBy = "category", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private List<Product> products = new ArrayList<>();
 
 	public Category() {
 	}
@@ -61,6 +69,12 @@ public class Category {
 	public void setCoverImage(String coverImage) {
 		this.coverImage = coverImage;
 	}
+
+	public List<Product> getProducts() {
+		return products;
+	}
+
+	public void setProducts(List<Product> products) {
+		this.products = products;
+	}
 }
-
-

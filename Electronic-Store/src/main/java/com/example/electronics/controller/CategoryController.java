@@ -16,7 +16,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.electronics.dto.ApiResponseMessage;
 import com.example.electronics.dto.CategoryDto;
 import com.example.electronics.dto.PageableResponse;
+import com.example.electronics.dto.ProductDto;
 import com.example.electronics.service.CategoryService;
+import com.example.electronics.service.ProductService;
 
 import jakarta.validation.Valid;
 
@@ -26,6 +28,9 @@ public class CategoryController {
 
 	@Autowired
 	private CategoryService categoryService;
+
+	@Autowired
+	private ProductService productService;
 
 	// Create Category
 	@PostMapping("/create")
@@ -68,5 +73,22 @@ public class CategoryController {
 	public ResponseEntity<CategoryDto> getCategory(@PathVariable String categoryId) {
 		CategoryDto category = categoryService.get(categoryId);
 		return new ResponseEntity<>(category, HttpStatus.OK);
+	}
+
+	// create product with category(product ko category ke andar daalna h)
+
+	@PostMapping("/{categoryId}/products")
+	public ResponseEntity<ProductDto> createProductWithCategory(@PathVariable String categoryId,
+			@RequestBody ProductDto productDto) {
+		ProductDto productWithCategory = productService.createcategoryWithProduct(productDto, categoryId);
+		return new ResponseEntity<>(productWithCategory, HttpStatus.CREATED);
+	}
+
+	// update category into product
+	@PutMapping("/{categoryId}/products/{productId}")
+	public ResponseEntity<ProductDto> updateCategory(@PathVariable String categoryId,
+			@PathVariable String productId) {
+		ProductDto updateCategory = productService.updateCategory (categoryId ,productId);
+		return new ResponseEntity<>(updateCategory, HttpStatus.OK);
 	}
 }
