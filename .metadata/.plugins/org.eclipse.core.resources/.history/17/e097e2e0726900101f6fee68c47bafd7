@@ -1,0 +1,13 @@
+package com.example.electronics.exception;
+
+public class BadApiRequestException extends Exception {
+	public BadApiRequestException(String message) {
+        super(message);
+    }
+
+    public BadApiRequestException() {
+        super("Bad Request !!");
+    }
+
+
+}

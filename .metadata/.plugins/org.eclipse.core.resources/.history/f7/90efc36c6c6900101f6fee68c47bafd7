@@ -1,0 +1,38 @@
+package com.example.electronics.dto;
+
+Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+public class CartDto {
+
+    private String cartId;
+    private Date createdAt;
+    private UserDto user;
+    private List<CartItemDto> items = new ArrayList<>();
+	public String getCartId() {
+		return cartId;
+	}
+	public void setCartId(String cartId) {
+		this.cartId = cartId;
+	}
+	public Date getCreatedAt() {
+		return createdAt;
+	}
+	public void setCreatedAt(Date createdAt) {
+		this.createdAt = createdAt;
+	}
+	public UserDto getUser() {
+		return user;
+	}
+	public void setUser(UserDto user) {
+		this.user = user;
+	}
+	public List<CartItemDto> getItems() {
+		return items;
+	}
+	public void setItems(List<CartItemDto> items) {
+		this.items = items;
+	}
+}
