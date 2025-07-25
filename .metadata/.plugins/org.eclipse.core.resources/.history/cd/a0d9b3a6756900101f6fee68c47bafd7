@@ -1,0 +1,5 @@
+package com.example.electronics.repository;
+
+public interface OrderItemRepository extends JpaRepository<OrderItem, Integer>
+{
+}

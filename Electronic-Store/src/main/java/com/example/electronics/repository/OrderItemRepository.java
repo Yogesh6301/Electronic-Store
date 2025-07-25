@@ -1,5 +1,9 @@
 package com.example.electronics.repository;
 
-public class OrderItemRepository {
+import org.springframework.data.jpa.repository.JpaRepository;
 
+import com.example.electronics.entity.OrderItem;
+
+public interface OrderItemRepository extends JpaRepository<OrderItem, Integer>
+{
 }

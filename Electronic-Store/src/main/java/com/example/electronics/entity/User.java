@@ -1,168 +1,193 @@
 package com.example.electronics.entity;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "users")
 public class User {
 
-    @Id
-    // @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String userId;
+	public List<Order> getOrders() {
+		return orders;
+	}
 
-    @Column(name = "user_name")
-    private String name;
+	public void setOrders(List<Order> orders) {
+		this.orders = orders;
+	}
 
-    @Column(name = "user_email", unique = true)
-    private String email;
+	public Cart getCart() {
+		return cart;
+	}
 
-    @Column(name = "user_password", length = 10)
-    private String password;
+	public void setCart(Cart cart) {
+		this.cart = cart;
+	}
 
-    private String gender;
-    private String about;
+	@Id
+	// @GeneratedValue(strategy = GenerationType.IDENTITY)
+	private String userId;
 
-    @Column(name = "user_image_name")
-    private String imageName;
+	@Column(name = "user_name")
+	private String name;
 
-    // No-args constructor
-    public User() {
-    }
+	@Column(name = "user_email", unique = true)
+	private String email;
 
-    // All-args constructor
-    public User(String userId, String name, String email, String password, String gender, String about, String imageName) {
-        this.userId = userId;
-        this.name = name;
-        this.email = email;
-        this.password = password;
-        this.gender = gender;
-        this.about = about;
-        this.imageName = imageName;
-    }
+	@Column(name = "user_password", length = 500)
+	private String password;
 
-    // Builder pattern
-    public static class Builder {
-        private String userId;
-        private String name;
-        private String email;
-        private String password;
-        private String gender;
-        private String about;
-        private String imageName;
+	private String gender;
 
-        public Builder userId(String userId) {
-            this.userId = userId;
-            return this;
-        }
+	@Column(length = 1000)
+	private String about;
 
-        public Builder name(String name) {
-            this.name = name;
-            return this;
-        }
+	@Column(name = "user_image_name")
+	private String imageName;
 
-        public Builder email(String email) {
-            this.email = email;
-            return this;
-        }
+	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+	private List<Order> orders = new ArrayList<>();
 
-        public Builder password(String password) {
-            this.password = password;
-            return this;
-        }
-
-        public Builder gender(String gender) {
-            this.gender = gender;
-            return this;
-        }
-
-        public Builder about(String about) {
-            this.about = about;
-            return this;
-        }
-
-        public Builder imageName(String imageName) {
-            this.imageName = imageName;
-            return this;
-        }
-
-        public User build() {
-            return new User(userId, name, email, password, gender, about, imageName);
-        }
-    }
-
-    // Getters and Setters
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getGender() {
-        return gender;
-    }
-
-    public void setGender(String gender) {
-        this.gender = gender;
-    }
-
-    public String getAbout() {
-        return about;
-    }
-
-    public void setAbout(String about) {
-        this.about = about;
-    }
-
-    public String getImageName() {
-        return imageName;
-    }
-
-    public void setImageName(String imageName) {
-        this.imageName = imageName;
-    }
-
-    @Override
-    public String toString() {
-        return "User{" +
-                "userId='" + userId + '\'' +
-                ", name='" + name + '\'' +
-                ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
-                ", gender='" + gender + '\'' +
-                ", about='" + about + '\'' +
-                ", imageName='" + imageName + '\'' +
-                '}';
-    }
+	@OneToOne(mappedBy = "user", cascade = CascadeType.REMOVE)
+	private Cart cart;
 
 	
-
+	// No-args constructor
+	public User() {
 	}
+
+	// All-args constructor
+	public User(String userId, String name, String email, String password, String gender, String about,
+			String imageName) {
+		this.userId = userId;
+		this.name = name;
+		this.email = email;
+		this.password = password;
+		this.gender = gender;
+		this.about = about;
+		this.imageName = imageName;
+	}
+
+	// Builder pattern
+	public static class Builder {
+		private String userId;
+		private String name;
+		private String email;
+		private String password;
+		private String gender;
+		private String about;
+		private String imageName;
+
+		public Builder userId(String userId) {
+			this.userId = userId;
+			return this;
+		}
+
+		public Builder name(String name) {
+			this.name = name;
+			return this;
+		}
+
+		public Builder email(String email) {
+			this.email = email;
+			return this;
+		}
+
+		public Builder password(String password) {
+			this.password = password;
+			return this;
+		}
+
+		public Builder gender(String gender) {
+			this.gender = gender;
+			return this;
+		}
+
+		public Builder about(String about) {
+			this.about = about;
+			return this;
+		}
+
+		public Builder imageName(String imageName) {
+			this.imageName = imageName;
+			return this;
+		}
+
+		public User build() {
+			return new User(userId, name, email, password, gender, about, imageName);
+		}
+	}
+
+	// Getters and Setters
+	public String getUserId() {
+		return userId;
+	}
+
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public String getGender() {
+		return gender;
+	}
+
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
+
+	public String getAbout() {
+		return about;
+	}
+
+	public void setAbout(String about) {
+		this.about = about;
+	}
+
+	public String getImageName() {
+		return imageName;
+	}
+
+	public void setImageName(String imageName) {
+		this.imageName = imageName;
+	}
+
+	@Override
+	public String toString() {
+		return "User{" + "userId='" + userId + '\'' + ", name='" + name + '\'' + ", email='" + email + '\''
+				+ ", password='" + password + '\'' + ", gender='" + gender + '\'' + ", about='" + about + '\''
+				+ ", imageName='" + imageName + '\'' + '}';
+	}
+
+}

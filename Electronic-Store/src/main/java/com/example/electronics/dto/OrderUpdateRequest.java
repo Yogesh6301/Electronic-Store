@@ -1,0 +1,79 @@
+package com.example.electronics.dto;
+
+import java.util.Date;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class OrderUpdateRequest {
+
+    private String orderStatus;
+    private String paymentStatus;
+
+    private String billingName;
+
+    private String billingPhone;
+
+    private String billingAddress;
+
+	private Date deliveredDate;
+
+	public String getOrderStatus() {
+		return orderStatus;
+	}
+
+	public void setOrderStatus(String orderStatus) {
+		this.orderStatus = orderStatus;
+	}
+
+	public String getPaymentStatus() {
+		return paymentStatus;
+	}
+
+	public void setPaymentStatus(String paymentStatus) {
+		this.paymentStatus = paymentStatus;
+	}
+
+	public String getBillingName() {
+		return billingName;
+	}
+
+	public void setBillingName(String billingName) {
+		this.billingName = billingName;
+	}
+
+	public String getBillingPhone() {
+		return billingPhone;
+	}
+
+	public void setBillingPhone(String billingPhone) {
+		this.billingPhone = billingPhone;
+	}
+
+	public String getBillingAddress() {
+		return billingAddress;
+	}
+
+	public void setBillingAddress(String billingAddress) {
+		this.billingAddress = billingAddress;
+	}
+
+	public Date getDeliveredDate() {
+		return deliveredDate;
+	}
+
+	public void setDeliveredDate(Date deliveredDate) {
+		this.deliveredDate = deliveredDate;
+	}
+
+
+    
+}
