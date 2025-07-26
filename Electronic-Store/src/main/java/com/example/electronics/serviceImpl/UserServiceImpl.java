@@ -9,7 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.example.electronics.dto.PageableResponse;
@@ -25,6 +25,10 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	private UserRepository userRepository;
+	
+	@Autowired
+	private PasswordEncoder passwordEncoder; // Make sure this is injected
+
 
 	@Override
 	public UserDto createUser(UserDto userDto) {
@@ -35,6 +39,7 @@ public class UserServiceImpl implements UserService {
 
 		// Dto to Entity Conversion
 		User user = dtoToEntity(userDto);
+		user.setPassword(passwordEncoder.encode(user.getPassword()));
 
 		User savedUser = userRepository.save(user);
 

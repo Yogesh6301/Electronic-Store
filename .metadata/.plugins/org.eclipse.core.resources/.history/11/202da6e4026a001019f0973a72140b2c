@@ -1,0 +1,8 @@
+package com.example.electronics.dto;
+
+public class JwtResponse {
+
+	private String jwtToken;
+	private UserDto user;
+
+}

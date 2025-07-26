@@ -1,7 +1,11 @@
 package com.example.electronics.entity;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -14,26 +18,9 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "users")
-public class User {
-
-	public List<Order> getOrders() {
-		return orders;
-	}
-
-	public void setOrders(List<Order> orders) {
-		this.orders = orders;
-	}
-
-	public Cart getCart() {
-		return cart;
-	}
-
-	public void setCart(Cart cart) {
-		this.cart = cart;
-	}
+public class User implements UserDetails {
 
 	@Id
-	// @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private String userId;
 
 	@Column(name = "user_name")
@@ -42,7 +29,7 @@ public class User {
 	@Column(name = "user_email", unique = true)
 	private String email;
 
-	@Column(name = "user_password", length = 500)
+	@Column(name = "user_password", length = 255, nullable = false)
 	private String password;
 
 	private String gender;
@@ -59,7 +46,6 @@ public class User {
 	@OneToOne(mappedBy = "user", cascade = CascadeType.REMOVE)
 	private Cart cart;
 
-	
 	// No-args constructor
 	public User() {
 	}
@@ -76,7 +62,7 @@ public class User {
 		this.imageName = imageName;
 	}
 
-	// Builder pattern
+	// Builder class
 	public static class Builder {
 		private String userId;
 		private String name;
@@ -183,11 +169,55 @@ public class User {
 		this.imageName = imageName;
 	}
 
+	public List<Order> getOrders() {
+		return orders;
+	}
+
+	public void setOrders(List<Order> orders) {
+		this.orders = orders;
+	}
+
+	public Cart getCart() {
+		return cart;
+	}
+
+	public void setCart(Cart cart) {
+		this.cart = cart;
+	}
+
 	@Override
 	public String toString() {
 		return "User{" + "userId='" + userId + '\'' + ", name='" + name + '\'' + ", email='" + email + '\''
-				+ ", password='" + password + '\'' + ", gender='" + gender + '\'' + ", about='" + about + '\''
-				+ ", imageName='" + imageName + '\'' + '}';
+				+ ", gender='" + gender + '\'' + ", about='" + about + '\'' + ", imageName='" + imageName + '\'' + '}';
 	}
 
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		return new ArrayList<>(); // You can provide actual roles if needed
+	}
+
+	@Override
+	public String getUsername() {
+		return this.email; // We use email as username
+	}
+
+	@Override
+	public boolean isAccountNonExpired() {
+		return true;
+	}
+
+	@Override
+	public boolean isAccountNonLocked() {
+		return true;
+	}
+
+	@Override
+	public boolean isCredentialsNonExpired() {
+		return true;
+	}
+
+	@Override
+	public boolean isEnabled() {
+		return true;
+	}
 }
